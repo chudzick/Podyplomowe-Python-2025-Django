@@ -1,0 +1,61 @@
+{% extends 'index.html' %}
+
+{% block page_title %}
+    Wszystkie filmy
+{% endblock %}
+
+{% block content %}
+    <div class="grid grid-cols-4 gap-6 mb-8">
+        <div class="bg-movie-purple card shadow-xl">
+            <div class="card-body">
+                <div class="text-xl font-semibold">{{ details.id__count }}</div>
+                <p class="text-sm">Wszystkie filmy</p>
+            </div>
+        </div>
+        <div class="bg-movie-green card shadow-xl">
+            <div class="card-body">
+                <div class="text-xl font-semibold">{{ details.vote_average__avg|floatformat:2 }}</div>
+                <p class="text-sm">Średnia ocena filmów</p>
+            </div>
+        </div>
+        <div class="bg-movie-red card shadow-xl">
+            <div class="card-body">
+                <div class="text-xl font-semibold">{{ details.vote_count__min }}</div>
+                <p class="text-sm">Minimalna liczba głosów</p>
+            </div>
+        </div>
+        <div class="bg-movie-blue card shadow-xl">
+            <div class="card-body">
+                <div class="text-xl font-semibold">{{ details.vote_count__max }}</div>
+                <p class="text-sm">Maksymalna liczba głosów</p>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Film</th>
+            <th>Data wydania</th>
+            <th>Ocena</th>
+            <th>Liczba głosów</th>
+            <th>Popularność</th>
+            <th>Akcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for movie in movies %}
+            <tr>
+                <td>{{ movie.title }}</td>
+                <td>{{ movie.release_date|date:"M d, Y" }}</td>
+                <td>{{ movie.vote_average }}</td>
+                <td>{{ movie.vote_count }}</td>
+                <td>{{ movie.popularity|floatformat:1 }}</td>
+                <td>
+                    <a href="{% url 'detail_movie_url' tmdb_id=movie.tmdb_id %}"
+                       class="btn btn-outline">Szczegóły</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

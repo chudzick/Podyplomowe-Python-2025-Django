@@ -1,0 +1,43 @@
+{% extends 'index.html' %}
+
+{% block page_title %}
+    {{ movie.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="card card-border bg-base-100 w-full">
+        <div class="card-body">
+            <div class="flex gap-4 items-center">
+                <div>
+                    {% if movie.vote_average >= 7 %}
+                        <div class="radial-progress text-success"
+                             style="--size:50px; --value:{{ movie.vote_average_percent }};"
+                             aria-valuenow="{{ movie.vote_average }}" role="progressbar">
+                            {{ movie.vote_average }}
+                        </div>
+                    {% elif movie.vote_average >= 4 %}
+                        <div class="radial-progress text-warning"
+                             style="--size:50px; --value:{{ movie.vote_average_percent }};"
+                             aria-valuenow="{{ movie.vote_average }}" role="progressbar">
+                            {{ movie.vote_average }}
+                        </div>
+                    {% else %}
+                        <div class="radial-progress text-danger"
+                             style="--size:50px; --value:{{ movie.vote_average_percent }};"
+                             aria-valuenow="{{ movie.vote_average }}" role="progressbar">
+                            {{ movie.vote_average }}
+                        </div>
+                    {% endif %}
+
+                </div>
+                <div class="flex-col">
+                    <div class="text-xl font-semibold">{{ movie.title }}</div>
+                    <div>{{ movie.release_date|date:'D d M Y' }}</div>
+                </div>
+            </div>
+            <div class="w-1/2 text-zinc-500">
+                {{ movie.overview }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
