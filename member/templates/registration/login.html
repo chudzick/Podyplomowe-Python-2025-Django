@@ -1,0 +1,16 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Zaloguj</title>
+
+    <link rel="stylesheet" href="{% static 'dist/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'dist/main.css' %}">
+</head>
+<body>
+{% include 'common/tailwind-form.html' with form=form button_name='Zaloguj' %}
+<div>Nie masz konta? <a href="{% url 'register_url' %}">Zarejestruj się</a></div>
+</body>
+</html>

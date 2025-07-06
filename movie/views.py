@@ -1,5 +1,7 @@
 import datetime
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Movie, MovieCollection, MovieStatistics, User
 from django.db.models import Avg, Min, Max, Count
@@ -36,6 +38,7 @@ def all_movies(request):
     })
 
 
+@login_required
 def detail_movie(request, tmdb_id):
     found_movie = Movie.objects.get(tmdb_id=tmdb_id)
     return render(request, 'movie/movie_details.html', {
@@ -47,6 +50,8 @@ def detail_movie(request, tmdb_id):
     })
 
 
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_movie(request):
     if request.method == 'POST':
         stats = MovieStatistics.objects.create(
@@ -71,6 +76,8 @@ def add_movie(request):
     return render(request, 'movie/movie_add.html')
 
 
+@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def add_movie_with_form(request):
     if request.method == 'POST':
         form = MovieForm(request.POST)
@@ -83,7 +90,7 @@ def add_movie_with_form(request):
                 vote_count=data['vote_count'],
             )
 
-            Movie .objects.create(
+            Movie.objects.create(
                 tmdb_id=data['tmdb_id'],
                 title=data['title'],
                 overview=data['overview'],
@@ -105,13 +112,16 @@ def add_movie_with_form(request):
     })
 
 
+@login_required
 def all_collections(request):
-    movie_collections = MovieCollection.objects.all().annotate(movie_count=Count('movies'))
+    logged_user = request.user
+    movie_collections = MovieCollection.objects.filter(owner=logged_user).annotate(movie_count=Count('movies'))
     return render(request, 'collection/collection_all.html', {
         'collections': movie_collections,
     })
 
 
+@login_required
 def detail_collection(request, id):
     movie_collection = get_object_or_404(MovieCollection, id=id)
     return render(request, 'collection/collection_details.html', context={
@@ -123,7 +133,7 @@ def detail_collection(request, id):
     })
 
 
-class AddCollectionView(View):
+class AddCollectionView(View, LoginRequiredMixin):
 
     def get(self, request):
         form = MovieCollectionForm()
@@ -133,10 +143,11 @@ class AddCollectionView(View):
 
     def post(self, request):
         form = MovieCollectionForm(request.POST)
+        logged_user = request.user
 
         if form.is_valid():
             collection = form.save(commit=False)
-            collection.owner = User.objects.all()[0]
+            collection.owner = logged_user
             collection.save()
             form.save_m2m()
 
