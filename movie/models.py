@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, RegexValidator, \
-    BaseValidator
+    BaseValidator, EmailValidator
 
 
 def validate_even(value):
@@ -46,3 +46,20 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class User(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.EmailField(validators=[EmailValidator()])
+
+    friends = models.ManyToManyField('self')
+
+
+class MovieCollection(models.Model):
+    name = models.CharField(max_length=1000)
+    creation_date = models.DateField(auto_now_add=True)
+    update_date = models.DateField(auto_now=True)
+
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='collections')
+    movies = models.ManyToManyField(Movie)
