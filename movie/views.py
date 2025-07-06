@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from .models import Movie
+from django.shortcuts import render, get_object_or_404
+from .models import Movie, MovieCollection
 from django.db.models import Avg, Min, Max, Count
 from django.urls import reverse
 
@@ -32,5 +32,23 @@ def detail_movie(request, tmdb_id):
         'breadcrumbs': [
             Breadcrumb(reverse('all_movies_url'), 'Wszystkie filmy'),
             Breadcrumb(reverse('detail_movie_url', args=[found_movie.tmdb_id]), found_movie.title),
+        ]
+    })
+
+
+def all_collections(request):
+    movie_collections = MovieCollection.objects.all().annotate(movie_count=Count('movies'))
+    return render(request, 'collection/collection_all.html', {
+        'collections': movie_collections,
+    })
+
+
+def detail_collection(request, id):
+    movie_collection = get_object_or_404(MovieCollection, id=id)
+    return render(request, 'collection/collection_details.html', context={
+        'collection': movie_collection,
+        'breadcrumbs': [
+            Breadcrumb(reverse('all_collections_url'), 'Wszystkie kolekcje'),
+            Breadcrumb(reverse('detail_collection_url', args=[movie_collection.id]), movie_collection.name),
         ]
     })

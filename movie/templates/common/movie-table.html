@@ -1,0 +1,27 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Film</th>
+        <th>Data wydania</th>
+        <th>Ocena</th>
+        <th>Liczba głosów</th>
+        <th>Popularność</th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for movie in movies %}
+        <tr>
+            <td>{{ movie.title }}</td>
+            <td>{{ movie.release_date|date:"M d, Y" }}</td>
+            <td>{{ movie.statistics.vote_average }}</td>
+            <td>{{ movie.statistics.vote_count }}</td>
+            <td>{{ movie.statistics.popularity|floatformat:1 }}</td>
+            <td>
+                <a href="{% url 'detail_movie_url' tmdb_id=movie.tmdb_id %}"
+                   class="btn btn-outline">Szczegóły</a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

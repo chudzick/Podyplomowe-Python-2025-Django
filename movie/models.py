@@ -55,6 +55,9 @@ class User(models.Model):
 
     friends = models.ManyToManyField('self')
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
+
 
 class MovieCollection(models.Model):
     name = models.CharField(max_length=1000)

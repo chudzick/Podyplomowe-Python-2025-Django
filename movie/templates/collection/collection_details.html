@@ -1,0 +1,25 @@
+{% extends 'index.html' %}
+
+{% block page_title %}
+    {{ collection.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <div class="text-xl font-bold">{{ collection.name }}</div>
+            <div class="flex gap-4 text-zinc-500">
+                <div>👦 Utworzona przez: {{ collection.owner }}</div>
+                <div>📅 Utworzona: {{ collection.creation_date }}</div>
+                <div>🕙 Aktualizowana: {{ collection.update_date }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-lg mt-8">
+        <div class="card-body">
+            {% include 'common/movie-table.html' with movies=collection.movies.all %}
+        </div>
+    </div>
+
+{% endblock %}
