@@ -1,9 +1,11 @@
 import datetime
 
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Movie, MovieCollection, MovieStatistics
+from .models import Movie, MovieCollection, MovieStatistics, User
 from django.db.models import Avg, Min, Max, Count
 from django.urls import reverse
+from .forms import MovieForm, MovieCollectionForm
+from django.views import View
 
 
 class Breadcrumb:
@@ -69,6 +71,40 @@ def add_movie(request):
     return render(request, 'movie/movie_add.html')
 
 
+def add_movie_with_form(request):
+    if request.method == 'POST':
+        form = MovieForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            stats = MovieStatistics.objects.create(
+                popularity=data['popularity'],
+                vote_average=data['vote_average'],
+                vote_count=data['vote_count'],
+            )
+
+            Movie .objects.create(
+                tmdb_id=data['tmdb_id'],
+                title=data['title'],
+                overview=data['overview'],
+                release_date=data['release_date'],
+                cast=data['cast'],
+                genres=data['genres'],
+                director=data['director'],
+                keyword=data['keyword'],
+                statistics=stats
+            )
+            return redirect('all_movies_url')
+        else:
+            print(form.errors)
+    else:
+        form = MovieForm()
+
+    return render(request, 'movie/movie_add_with_form.html', {
+        'form': form
+    })
+
+
 def all_collections(request):
     movie_collections = MovieCollection.objects.all().annotate(movie_count=Count('movies'))
     return render(request, 'collection/collection_all.html', {
@@ -85,3 +121,27 @@ def detail_collection(request, id):
             Breadcrumb(reverse('detail_collection_url', args=[movie_collection.id]), movie_collection.name),
         ]
     })
+
+
+class AddCollectionView(View):
+
+    def get(self, request):
+        form = MovieCollectionForm()
+        return render(request, 'collection/collection_add.html', {
+            'form': form
+        })
+
+    def post(self, request):
+        form = MovieCollectionForm(request.POST)
+
+        if form.is_valid():
+            collection = form.save(commit=False)
+            collection.owner = User.objects.all()[0]
+            collection.save()
+            form.save_m2m()
+
+            return redirect('all_collections_url')
+
+        return render(request, 'collection/collection_add.html', {
+            'form': form
+        })

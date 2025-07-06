@@ -1,0 +1,11 @@
+{% extends 'index.html' %}
+
+{% block page_title %}
+    Dodanie filmu
+{% endblock %}
+
+{% block content %}
+    <div class="flex justify-center">
+       {% include 'common/tailwind-form.html' with form=form button_name='Dodaj film' %}
+    </div>
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'index.html' %}
+
+{% block page_title %}
+    Dodanie kolekcji
+{% endblock %}
+
+{% block content %}
+    <div class="flex justify-center">
+        {% include 'common/tailwind-form.html' with form=form button_name='Dodaj kolekcję' %}
+    </div>
+{% endblock %}

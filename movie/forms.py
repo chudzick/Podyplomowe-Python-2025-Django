@@ -1,6 +1,6 @@
 from django import forms
 from django.core.validators import RegexValidator, MinLengthValidator, MinValueValidator
-from .models import PopularityRangeValidator, validate_even
+from .models import PopularityRangeValidator, validate_even, MovieCollection
 
 
 class MovieForm(forms.Form):
@@ -19,7 +19,7 @@ class MovieForm(forms.Form):
     overview = forms.CharField(
         label='Opis',
         validators=[MinLengthValidator(10)],
-        widget=forms.Textarea(attrs={'placeholder': 'Opis'})
+        widget=forms.Textarea(attrs={'placeholder': 'Opis', 'class': 'textarea h-24 w-full'})
     )
     # <input type="date"
     release_date = forms.DateField(
@@ -44,7 +44,7 @@ class MovieForm(forms.Form):
     keyword = forms.CharField(
         label='Słowa kluczowe',
         validators=[MinLengthValidator(10)],
-        widget=forms.Textarea(attrs={'placeholder': 'Słowa kluczowe'})
+        widget=forms.Textarea(attrs={'placeholder': 'Słowa kluczowe', 'class': 'textarea h-24 w-full'})
     )
 
     # Movie Statistics data
@@ -67,3 +67,18 @@ class MovieForm(forms.Form):
         validators=[MinValueValidator(0)],
         widget=forms.NumberInput(attrs={'placeholder': '0'})
     )
+
+
+class MovieCollectionForm(forms.ModelForm):
+    class Meta:
+        model = MovieCollection
+        # fields = '__all__'
+        # exclude = ['statistics']
+        fields = ['name', 'movies']
+        labels = {
+            'name': 'Nazwa kolekcji',
+            'movies': 'Filmy w kolekcji'
+        }
+        widgets = {
+            'movies': forms.SelectMultiple(attrs={'class': 'select select-border w-full h-48'})
+        }
