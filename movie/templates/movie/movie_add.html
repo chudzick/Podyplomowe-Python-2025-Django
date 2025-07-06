@@ -1,0 +1,72 @@
+{% extends 'index.html' %}
+
+{% block page_title %}
+    Dodanie filmu
+{% endblock %}
+
+{% block content %}
+    <div class="flex justify-center">
+        <form class="w-[400px] flex flex-col gap-2" method="post">
+            {% csrf_token %}
+            
+            <label class="input w-full">
+                TMDB ID
+                <input name="tmdb_id" type="text" class="grow" placeholder="TMDB ID"/>
+            </label>
+
+            <label class="input w-full">
+                Tytuł
+                <input name="title" type="text" class="grow" placeholder="Tytuł"/>
+            </label>
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Opis</legend>
+                <textarea name="overview" class="textarea h-24" placeholder="Opis"></textarea>
+            </fieldset>
+
+            <label class="input w-full">
+                Data wydania
+                <input name="release_date" type="date" class="grow"/>
+            </label>
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Obsada</legend>
+                <input name="cast" type="text" class="grow" placeholder="Obsada"/>
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Gatunki</legend>
+                <input name="genres" type="text" class="grow" placeholder="Gatunki"/>
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Reżyser</legend>
+                <input name="director" type="text" class="grow" placeholder="Reżyser"/>
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Słowa kluczowe</legend>
+                <textarea name="keywords" class="textarea h-24" placeholder="Słowa kluczowe"></textarea>
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Popularność</legend>
+                <input name="popularity" type="number" class="grow"/>
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Średnia głosów</legend>
+                <input name="vote_average" type="number" class="grow"/>
+            </fieldset>
+
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Liczba głosów</legend>
+                <input name="vote_count" type="number" class="grow"/>
+            </fieldset>
+            
+            <button class="btn btn-primary w-full" type="submit">
+                Dodaj film
+            </button>
+        </form>
+    </div>
+{% endblock %}

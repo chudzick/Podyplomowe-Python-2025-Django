@@ -32,5 +32,19 @@
         </div>
     </div>
 
+    <div class="card shadow-lg mb-8 p-4">
+        <form class="flex gap-2">
+            <label class="input">
+                Tytuł
+                <input {% if filter %}value="{{ filter }}" {% endif %} name="title" type="text"
+                       class="grow" placeholder="Wyszukaj po nazwie..."/>
+                <span class="badge badge-neutral badge-xs">Optional</span>
+            </label>
+            <button type="submit" class="btn btn-neutral btn-outline">Szukaj</button>
+            {% if filter %}
+                <a href="{% url 'all_movies_url' %}" class="btn btn-neutral btn-outline">Wyczyść filtr</a>
+            {% endif %}
+        </form>
+    </div>
     {% include 'common/movie-table.html' with movies=movies %}
 {% endblock %}

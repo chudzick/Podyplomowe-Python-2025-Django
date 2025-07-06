@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Movie, MovieCollection
+import datetime
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Movie, MovieCollection, MovieStatistics
 from django.db.models import Avg, Min, Max, Count
 from django.urls import reverse
 
@@ -12,7 +14,13 @@ class Breadcrumb:
 
 # Create your views here.
 def all_movies(request):
-    found_movies = Movie.objects.select_related('statistics').all()
+    filter = request.GET.get('title')
+
+    if filter and len(filter) >= 3:
+        found_movies = Movie.objects.select_related('statistics').filter(title__contains=filter)
+    else:
+        found_movies = Movie.objects.select_related('statistics').all()
+
     found_movies_aggregation = found_movies.aggregate(
         Count('id'),
         Avg('statistics__vote_average'),
@@ -20,6 +28,7 @@ def all_movies(request):
         Max('statistics__vote_count')
     )
     return render(request, 'movie/movie_all.html', {
+        'filter': filter,
         'movies': found_movies,
         'details': found_movies_aggregation
     })
@@ -34,6 +43,30 @@ def detail_movie(request, tmdb_id):
             Breadcrumb(reverse('detail_movie_url', args=[found_movie.tmdb_id]), found_movie.title),
         ]
     })
+
+
+def add_movie(request):
+    if request.method == 'POST':
+        stats = MovieStatistics.objects.create(
+            popularity=request.POST['popularity'],
+            vote_average=request.POST['vote_average'],
+            vote_count=request.POST['vote_count'],
+        )
+
+        Movie.objects.create(
+            tmdb_id=request.POST['tmdb_id'],
+            title=request.POST['title'],
+            overview=request.POST['overview'],
+            release_date=datetime.datetime.strptime(request.POST['release_date'], '%Y-%m-%d'),
+            cast=request.POST['cast'],
+            genres=request.POST['genres'],
+            director=request.POST['director'],
+            keyword=request.POST['keywords'],
+            statistics=stats
+        )
+        return redirect('all_movies_url')
+
+    return render(request, 'movie/movie_add.html')
 
 
 def all_collections(request):
