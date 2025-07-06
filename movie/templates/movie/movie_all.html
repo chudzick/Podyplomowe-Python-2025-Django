@@ -14,19 +14,19 @@
         </div>
         <div class="bg-movie-green card shadow-xl">
             <div class="card-body">
-                <div class="text-xl font-semibold">{{ details.vote_average__avg|floatformat:2 }}</div>
+                <div class="text-xl font-semibold">{{ details.statistics__vote_average__avg|floatformat:2 }}</div>
                 <p class="text-sm">Średnia ocena filmów</p>
             </div>
         </div>
         <div class="bg-movie-red card shadow-xl">
             <div class="card-body">
-                <div class="text-xl font-semibold">{{ details.vote_count__min }}</div>
+                <div class="text-xl font-semibold">{{ details.statistics__vote_count__min }}</div>
                 <p class="text-sm">Minimalna liczba głosów</p>
             </div>
         </div>
         <div class="bg-movie-blue card shadow-xl">
             <div class="card-body">
-                <div class="text-xl font-semibold">{{ details.vote_count__max }}</div>
+                <div class="text-xl font-semibold">{{ details.statistics__vote_count__max }}</div>
                 <p class="text-sm">Maksymalna liczba głosów</p>
             </div>
         </div>
@@ -47,9 +47,9 @@
             <tr>
                 <td>{{ movie.title }}</td>
                 <td>{{ movie.release_date|date:"M d, Y" }}</td>
-                <td>{{ movie.vote_average }}</td>
-                <td>{{ movie.vote_count }}</td>
-                <td>{{ movie.popularity|floatformat:1 }}</td>
+                <td>{{ movie.statistics.vote_average }}</td>
+                <td>{{ movie.statistics.vote_count }}</td>
+                <td>{{ movie.statistics.popularity|floatformat:1 }}</td>
                 <td>
                     <a href="{% url 'detail_movie_url' tmdb_id=movie.tmdb_id %}"
                        class="btn btn-outline">Szczegóły</a>

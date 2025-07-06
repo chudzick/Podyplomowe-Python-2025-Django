@@ -9,23 +9,23 @@
         <div class="card-body">
             <div class="flex gap-4 items-center">
                 <div>
-                    {% if movie.vote_average >= 7 %}
+                    {% if movie.statistics.vote_average >= 7 %}
                         <div class="radial-progress text-success"
-                             style="--size:50px; --value:{{ movie.vote_average_percent }};"
-                             aria-valuenow="{{ movie.vote_average }}" role="progressbar">
-                            {{ movie.vote_average }}
+                             style="--size:50px; --value:{{ movie.statistics.vote_average_percent }};"
+                             aria-valuenow="{{ movie.statistics.vote_average }}" role="progressbar">
+                            {{ movie.statistics.vote_average }}
                         </div>
-                    {% elif movie.vote_average >= 4 %}
+                    {% elif movie.statistics.vote_average >= 4 %}
                         <div class="radial-progress text-warning"
-                             style="--size:50px; --value:{{ movie.vote_average_percent }};"
-                             aria-valuenow="{{ movie.vote_average }}" role="progressbar">
-                            {{ movie.vote_average }}
+                             style="--size:50px; --value:{{ movie.statistics.vote_average_percent }};"
+                             aria-valuenow="{{ movie.statistics.vote_average }}" role="progressbar">
+                            {{ movie.statistics.vote_average }}
                         </div>
                     {% else %}
                         <div class="radial-progress text-danger"
-                             style="--size:50px; --value:{{ movie.vote_average_percent }};"
-                             aria-valuenow="{{ movie.vote_average }}" role="progressbar">
-                            {{ movie.vote_average }}
+                             style="--size:50px; --value:{{ movie.statistics.vote_average_percent }};"
+                             aria-valuenow="{{ movie.statistics.vote_average }}" role="progressbar">
+                            {{ movie.statistics.vote_average }}
                         </div>
                     {% endif %}
 

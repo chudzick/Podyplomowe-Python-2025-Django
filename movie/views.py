@@ -12,12 +12,12 @@ class Breadcrumb:
 
 # Create your views here.
 def all_movies(request):
-    found_movies = Movie.objects.all()
+    found_movies = Movie.objects.select_related('statistics').all()
     found_movies_aggregation = found_movies.aggregate(
         Count('id'),
-        Avg('vote_average'),
-        Min('vote_count'),
-        Max('vote_count')
+        Avg('statistics__vote_average'),
+        Min('statistics__vote_count'),
+        Max('statistics__vote_count')
     )
     return render(request, 'movie/movie_all.html', {
         'movies': found_movies,
